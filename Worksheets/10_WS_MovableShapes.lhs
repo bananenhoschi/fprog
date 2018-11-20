@@ -63,13 +63,14 @@ Implementieren Sie Instanzen für Point, Figure und TextBox.
 > instance Movable Figure where
 >   move v f = moveFigure v f
 
+> instance Movable TextBox where
+>   move v (Text p s) = Text (movePoint v p) s
 
 Aufgabe 3)
 Implementieren Sie eine Instanz für [a] wobei a der Typklasse Movable
 angehören muss:
 
 > instance (Movable a) => Movable [a] where
->   move _ []  = []
 >   move v xs  = map (\a -> move v a) xs
 
 Wenn Sie alles richtig gemacht haben, können Sie nun eine Liste,
