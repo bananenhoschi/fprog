@@ -44,8 +44,18 @@ startet '*' und von da weitere Teile wie Äste davon abzweigen.
 Aufgabe 1)
 Zeichnen Sie den Baum und konstruieren Sie den Wert vom Typ Expr in Haskell für folgenden
 Ausdruck: "(3*4)+(5+2)"
+       +
+     /   \
+    *     +
+   / \   / \
+  3  4  5   2
 
->
+exA1 = Add (Mul (Const 3) (Const 4)) (Add (Const 5) (Const 2))
+
+> sol = ((Const 3) `Mul` (Const 4)) `Add` ((Const 5) `Add` (Const 2))
+
+sol = ((Const 3) `Mul` (Const 4)) `Add` ((Const 5) `Add` (Const 2))
+
 
 Aufgabe 2)
 Einen solchen arithmetischen Ausdruck kann man nun ausrechnen (evaluieren).
@@ -62,11 +72,14 @@ Expr ist der Wert sofort klar? Bei den anderen beiden Fällen, müssen Sie sich 
 wie man zum Resultat kommt, wenn die beiden Teilresultate schon evaluiert wurden:
 
 > eval :: Expr -> Int
-> eval = undefined --TODO
+> eval (Add a b) = eval a + eval b
+> eval (Mul a b) = eval a * eval b
+> eval (Const x) = x
 
 Aufgabe 3)
 Schreiben Sie mindestens drei Unit Tests um die eval Funktion zu testen.
 
+eval 1 + 2 == 3
 
 
 Aufgabe 4)
@@ -89,7 +102,15 @@ verändern:
 eval e == eval (simpl e)
 
 > simpl :: Expr -> Expr
-> simpl = undefined
+> simpl (Add (Const 0) b) = simpl b
+> simpl (Add a (Const 0)) = simpl a
+> simpl (Add a b) = Add (simpl a) (simpl b)
+> simpl (Mul (Const 0) b) = Const 0
+> simpl (Mul (Const 1) b) = simpl b
+> simpl (Mul a (Const 0)) = Const 0
+> simpl (Mul a (Const 1)) = simpl a
+> simpl (Mul a b) = Mul (simpl a) (simpl b)
+> simpl x = x
 
 Aufgabe 5)
 Schreiben Sie wiederum einige Unit Tests um die simpl Funktion zu überprüfen.
