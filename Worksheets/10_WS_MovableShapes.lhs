@@ -16,7 +16,7 @@ Der Typ Point wird verwendet um ein Punkt in einer 2D Ebene zu definieren:
 -------|--------> x
        |
 
-> data Point = XY Float Float deriving Show
+> data Point = XY Float Float
 
 Ein Punkt kann man entlang eines Vektors verschieben:
 
@@ -92,20 +92,36 @@ folgt ausgibt: "P(x=1.0,y=2.0)"
 Hinweis: Sie müssen das "deriving Show" bei der bestehenden Point-
 Definition entfernen.
 
->
+> instance Show Point where
+>   show (XY x y) = "P(x=" ++ show x ++ ",y=" ++ show y ++ ")"
 
 Aufgabe 5)
 Implementieren Sie für den Typ Point eine Instanz für die Klasse Eq.
 
->
+> instance Eq Point where
+>   (==) (XY x1 y1) (XY x2 y2) = x1 == x2 && y1 == y2
+>   (/=) a b = not ((==) a b)
+
+> p1 = (XY 1 1)
+> p2 = (XY 1 2)
+> p3 = (XY 1 1)
+> p4 = (XY 2 1)
+
 
 Aufgabe 6)
 Implementieren Sie für den Typ Point eine Instanz für die Klasse Ord.
 Hinweis: Zuerst nach der X Komponente und dann nach der Y Komponente vergleichen:
 
->
+> instance Ord Point where
+>   (<) (XY x1 y1) (XY x2 y2) = x1 < x2 || y1 < y2
+>   (>)  x y = not ((<) x y)
+>   (<=) x y = (<) x y || x == y
+>   (>=) x y = not ((<=) x y) || x == y
 
 Aufgabe 7)
 Implementieren Sie für den Typ Figure eine Instanz für die Klasse Eq.
 
->
+> instance Eq Figure where
+>   (==) (Circle p1 f1) (Circle p2 f2) = p1 == p2 && f1 == f2
+>   (==) (Line p1 p2) (Line p3 p4) = p1 == p3 && p2 == p4
+>   (/=) a b = not ((==) a b)
