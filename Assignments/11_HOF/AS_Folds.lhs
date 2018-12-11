@@ -81,11 +81,19 @@ Funktion für den Maybe Datentyp.
 Hier ist die Signatur:
 
 > mMap :: (a -> b) -> Maybe a -> Maybe b
-> mMap f = undefined
+> mMap f a = case a of
+>          Nothing -> Nothing
+>          Just a -> Just (f a)
 
 Mit Ihrer Definition sollte dann die findMatrikelByEmail so
 implementiert werden können:
 
 > findMatrikelByEmail' :: [Student] -> String -> Maybe Int
-> findMatrikelByEmail' students emailAddr =
->   mMap matrikelNr (find (\s -> email s == emailAddr) students)
+> findMatrikelByEmail' students emailAddr = mMap matrikelNr (find (\s -> email s == emailAddr) students)
+
+> s1 = Student "s1@fhnw.ch" 1
+> s2 = Student "s2@fhnw.ch" 2
+
+> students = [s1,s2]
+
+> test_findMatrikel = findMatrikelByEmail' students "s1@fhnw.ch"
